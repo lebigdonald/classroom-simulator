@@ -1,9 +1,9 @@
 import {Classroom} from "./classroom";
 
 export class Student {
-  isSitting = false;
-  rollNo: number;
-  classroom!: Classroom;
+  public isSitting = false;
+  public rollNo: number;
+  public classroom!: Classroom;
 
   constructor(rollNo: number, classroom: Classroom) {
     this.rollNo = rollNo;
@@ -12,32 +12,34 @@ export class Student {
     }
   }
 
-  getIsSitting(): boolean {
+  public getIsSitting(): boolean {
     return this.isSitting;
   }
 
   async enter(): Promise<void> {
-    if (!this.classroom.checkClassFull()) {
-      await this.sitDown();
+    if (this.classroom != null) {
+      if (!this.classroom.checkClassFull()) {
+        if (!this.classroom.isLectureRunning && this.classroom.getStudentAndVisitorSemaphore().availablePermits() > 0) {
+          await this.sitDown();
+        }
+      }
     }
   }
 
   async sitDown(): Promise<void> {
     try {
-      //  Check if lecturer is already in class
-        this.isSitting = true;
-        this.classroom.filled++; // Increment filled variable when student sits
-        await this.classroom.getStudentAndVisitorSemaphore().acquire(); //  Semaphore acquire
+      this.isSitting = true;
+      this.classroom.filled++; // Increment filled variable when student sits
+      await this.classroom.getStudentAndVisitorSemaphore().acquire(); //  Semaphore acquired
     } catch (error) {
-      this.leave();
       console.error(error);
     }
   }
 
   leave(): void {
-    if (this.classroom.lecturer === '') {
+    if (!this.classroom?.isLectureRunning && this.classroom?.lecturer === '') {
       this.isSitting = false;
-      this.classroom.filled--; // Decrement filled variable when student leave
+      this.classroom.filled--; // Increment filled variable when student leaves
       this.classroom?.getStudentAndVisitorSemaphore().release(); // Semaphore released
     }
   }

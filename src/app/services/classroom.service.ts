@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {interval, fromEvent, takeWhile} from 'rxjs';
+import {interval, fromEvent, takeWhile, BehaviorSubject} from 'rxjs';
 import {Classroom} from "../core/classroom";
 import {Student} from "../core/student";
 import {Lecturer} from "../core/lecturer";
@@ -42,14 +42,6 @@ export class ClassroomService {
       new Classroom('JS101', 30)
     ];
 
-    // this.visitors = [
-    //   new Visitor(this.classrooms[this.rand.nextInt(4)]),
-    //   new Visitor(this.classrooms[this.rand.nextInt(4)]),
-    //   new Visitor(this.classrooms[this.rand.nextInt(4)]),
-    //   new Visitor(this.classrooms[this.rand.nextInt(4)]),
-    //   new Visitor(this.classrooms[this.rand.nextInt(4)]),
-    // ];
-
     this.lecturers = [
       new Lecturer("Osama", this.classrooms[this.rand.nextInt(4)], this.students),
       new Lecturer("Barry", this.classrooms[this.rand.nextInt(4)], this.students),
@@ -61,25 +53,44 @@ export class ClassroomService {
 
     try {
       // Loop where students enter class
-      for (let i = 0; i < this.classrooms[this.rand.nextInt(4)].capacity; i++) {
-        this.students[i] = new Student(i, this.classrooms[this.rand.nextInt(4)]);
-        this.students[i].run();
+      for (let stud = 0; stud < this.classrooms[this.rand.nextInt(4)].capacity; stud++) {
+        this.students[stud] = new Student(stud, this.classrooms[this.rand.nextInt(4)]);
+        this.students[stud].run();
       }
 
       // Loop where visitors enter class
-      for (let z = 0; z < 4; z++) {
-        this.visitors[z] = new Visitor(this.classrooms[this.rand.nextInt(4)]);
-        this.visitors[z].run();
+      for (let vis = 0; vis < 5; vis++) {
+        this.visitors[vis] = new Visitor(this.classrooms[this.rand.nextInt(4)]);
+        this.visitors[vis].run();
       }
 
       // Loop where lecturer enter class
-      for (let l = 0; l < this.lecturers.length; l++) {
-        this.lecturers[l].run();
+      for (let lect = 0; lect < this.lecturers.length; lect++) {
+        this.lecturers[lect].run();
+      }
+
+      for (let lect = 0; lect < this.lecturers.length; lect++) {
+        this.lecturers[lect].startLecture();
       }
 
       // Monitor thread for printing status of classes
       let monitor: Monitor = new Monitor(this.classrooms);
       monitor.run();
+
+      for (let lect = 0; lect < this.lecturers.length; lect++) {
+        this.lecturers[lect].leave();
+      }
+
+      //  Release loop
+      for (let clas = 0; clas < this.classrooms.length; clas++) {
+        if (!this.classrooms[clas].isLectureRunning) {
+          for (let stud = 0; stud < this.students.length; stud++) {
+            if (!this.students[stud].isSitting) {
+              this.students[stud].leave();
+            }
+          }
+        }
+      }
     } catch (exception: any) {
       console.log(exception)
     }
