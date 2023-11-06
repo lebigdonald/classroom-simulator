@@ -9,7 +9,7 @@ export class Lecturer {
 
   constructor(lecturerName: string, classroom: Classroom, students: Student[]) {
     this.lecturerName = lecturerName;
-    if (classroom.getStudentAndVisitorSemaphore().availablePermits() > 0) {
+    if (classroom.getLecturerSemaphore().availablePermits() > 0) {
       this.classroom = classroom;
     }
     this.students = students;
@@ -19,60 +19,44 @@ export class Lecturer {
     return this.isLectureRunning;
   }
 
-  // Enter class function
-  public enter(): void {
-    // Checks whether the classroom is not full. If not full, the lecturer can enter
-    if (this.classroom.getLecturerSemaphore().availablePermits() > 0) {
+  async enter(): Promise<void> {
+    if (this.classroom?.getLecturerSemaphore().availablePermits() > 0) {
       try {
         this.classroom.lecturer = this.lecturerName;
-        this.classroom.getLecturerSemaphore().acquire(); // Semaphore acquired
-        this.startLecture();
+        await this.classroom.getLecturerSemaphore().acquire(); // Semaphore acquired
       } catch (error) {
         console.error(error);
       }
     }
   }
 
-  // Start lecture function
   async startLecture(): Promise<void> {
     let count = 0;
 
-    // Loop to count the number of students sitting in class
+    // Count the number of students sitting in class
     for (const student of this.students) {
-      if (student.classroom && this.classroom) {
-        if (student.classroom.className === this.classroom.className) {
-          // console.log(student);
-          if (student.isSitting) {
-            count++;
-          }
-        }
+      if (student.classroom === this.classroom && student.isSitting) {
+        count++;
       }
     }
 
-    // Lecture starts if all students are sitting
-    if (this.classroom) {
-      if (this.classroom.filled === count) {
-        this.classroom.isLectureRunning = true;
-        this.isLectureRunning = true;
-      } else {
-        this.leave();
-      }
+    // Start lecture if all students are sitting
+    if (this.classroom !== null && this.classroom.filled === count) {
+      this.classroom.isLectureRunning = true;
+      this.isLectureRunning = true;
     }
   }
 
-  // End lecture function
-  public leave(): void {
-    // Check if the lecture is running, if running, end it and release the semaphore
-    if (this.classroom.isLectureRunning) {
+  leave(): void {
+    if (this.classroom?.isLectureRunning) {
       this.classroom.isLectureRunning = false;
       this.classroom.lecturer = '';
       this.classroom.getLecturerSemaphore().release(); // Semaphore released
 
-      console.log(this.lecturerName + "'s lecture over!");
+      console.log(`${this.lecturerName}'s lecture over!`);
     }
   }
-
   async run(): Promise<void> {
-    this.enter();
+    await this.enter();
   }
 }
