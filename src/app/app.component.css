@@ -1,0 +1,35 @@
+/* Center the buttons */
+.container {
+  text-align: center;
+}
+
+/* Style the buttons */
+.button {
+  border: none;
+  border-radius: 50px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 5px;
+  cursor: pointer;
+}
+
+.start {
+  background-color: #4CAF50; /* Green */
+}
+
+.stop {
+  background-color: Red; /* Red */
+}
+
+.clear {
+  background-color: Grey; /* Yellow */
+}
+
+/* Add a hover effect to the buttons */
+.start:hover, .stop:hover, .clear:hover {
+  font-size: 18px;
+}
