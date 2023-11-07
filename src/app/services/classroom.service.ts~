@@ -69,6 +69,7 @@ export class ClassroomService {
 
       // Loop where visitors enter class
       for (let vis = 0; vis < this.visitors.length; vis++) {
+        // this.visitors[vis] = new Visitor(this.classrooms[this.rand.nextInt(4)]);
         this.visitors[vis].run();
       }
 

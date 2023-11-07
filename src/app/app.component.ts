@@ -1,4 +1,4 @@
-import {Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 import {ClassroomService} from "./services/classroom.service";
 
 @Component({
@@ -6,13 +6,11 @@ import {ClassroomService} from "./services/classroom.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
   title = 'Classroom Simulator';
   public isStarted: boolean = false;
 
-  constructor(private classroomService: ClassroomService) {}
-
-  ngOnInit(): void {
+  constructor(private classroomService: ClassroomService) {
   }
 
   startSimulation() {

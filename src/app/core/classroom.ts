@@ -1,4 +1,4 @@
-import { Semaphore } from './semaphore';
+import {Semaphore} from './semaphore';
 
 export class Classroom {
   public className: string;

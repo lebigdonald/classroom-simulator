@@ -19,9 +19,7 @@ export class Student {
   async enter(): Promise<void> {
     if (this.classroom != null) {
       if (!this.classroom.checkClassFull()) {
-        if (!this.classroom.isLectureRunning && this.classroom.getStudentAndVisitorSemaphore().availablePermits() > 0) {
-          await this.sitDown();
-        }
+        await this.sitDown();
       }
     }
   }

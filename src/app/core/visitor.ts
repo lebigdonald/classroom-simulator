@@ -12,9 +12,7 @@ export class Visitor {
 
   public enter(): void {
     if (!this.classroom?.checkClassFull()) {
-      // if (!this.classroom.isLectureRunning && this.classroom.getStudentAndVisitorSemaphore().availablePermits() > 0) {
-        this.sitDown();
-      // }
+      this.sitDown();
     }
   }
 
