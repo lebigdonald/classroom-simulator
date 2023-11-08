@@ -14,8 +14,8 @@ export class Monitor {
         Classroom: classroom.className,
         Lecturer: classroom.lecturer,
         InSession: classroom.isLectureRunning,
-        Students: classroom.filled,
-        Visitors: classroom.filledVisitor,
+        Students: classroom.isLectureRunning ? classroom.filled : 0,
+        Visitors: classroom.isLectureRunning ? classroom.filledVisitor : 0,
       }))
     );
   }

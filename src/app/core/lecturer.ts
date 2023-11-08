@@ -1,5 +1,5 @@
-import { Classroom } from './classroom';
-import { Student } from './student';
+import {Classroom} from './classroom';
+import {Student} from './student';
 
 export class Lecturer {
   public isLectureRunning: boolean = false;
@@ -56,6 +56,7 @@ export class Lecturer {
       console.log(`${this.lecturerName}'s lecture over!`);
     }
   }
+
   async run(): Promise<void> {
     await this.enter();
   }
