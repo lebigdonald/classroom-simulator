@@ -17,7 +17,7 @@ export class ClassroomService {
   public students: Student[] = [];
   public lecturers: Lecturer[] = [];
 
-  private flag: boolean = true; // Flag to end loop upon interrupt
+  public flag: boolean = false; // Flag to end loop upon interrupt
 
   constructor() {
   }
@@ -35,12 +35,12 @@ export class ClassroomService {
     this.flag = false;
   }
 
-  private simulation(): void {
+  public simulation(): void {
     this.classrooms = [
-      new Classroom('W201', 60),
-      new Classroom('W202', 60),
-      new Classroom('W101', 20),
-      new Classroom('JS101', 30)
+      new Classroom(60, 'W201', 60),
+      new Classroom(60, 'W202', 60),
+      new Classroom(20, 'W101', 20),
+      new Classroom(30, 'JS101', 30)
     ];
 
     this.visitors = [

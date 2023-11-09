@@ -1,35 +1,43 @@
-import {TestBed, async} from '@angular/core/testing';
-import {RouterTestingModule} from '@angular/router/testing';
-import {AppComponent} from '../app.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {AppComponent} from "../app.component";
+import {ClassroomService} from "../services/classroom.service";
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let classroomService: ClassroomService;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+      declarations: [AppComponent],
+      providers: [ClassroomService],
+    });
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    classroomService = TestBed.inject(ClassroomService);
+  });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it(`should have as title 'Classroom Simulator'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Classroom Simulator');
+  it('should start the simulation', () => {
+    spyOn(classroomService, 'run');
+    component.startSimulation();
+    expect(classroomService.run).toHaveBeenCalled();
+    expect(component.isStarted).toBe(true);
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('Classroom Simulator app is running!');
+  it('should stop the simulation', () => {
+    spyOn(classroomService, 'stop');
+    component.stopSimulation();
+    expect(classroomService.stop).toHaveBeenCalled();
+    expect(component.isStarted).toBe(false);
+  });
+
+  it('should clear the console', () => {
+    spyOn(console, 'clear');
+    component.clearConsole();
+    expect(console.clear).toHaveBeenCalled();
   });
 });

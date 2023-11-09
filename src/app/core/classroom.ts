@@ -3,6 +3,7 @@ import {Semaphore} from './semaphore';
 export class Classroom {
   public className: string;
   public capacity: number;
+  public permits: number;
   public lecturer: string = '';
   private lecturerSemaphore: Semaphore = new Semaphore(1);
   private studentAndVisitorSemaphore: Semaphore;
@@ -10,10 +11,11 @@ export class Classroom {
   public filled: number = 0;
   public filledVisitor: number = 0;
 
-  constructor(className: string, capacity: number) {
-    this.studentAndVisitorSemaphore = new Semaphore(capacity);
+  constructor(permits: number, className: string, capacity: number) {
+    this.studentAndVisitorSemaphore = new Semaphore(permits);
     this.className = className;
     this.capacity = capacity;
+    this.permits = permits;
   }
 
   // Check if the class is full
