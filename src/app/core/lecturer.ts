@@ -49,11 +49,12 @@ export class Lecturer {
 
   leave(): void {
     if (this.classroom?.isLectureRunning) {
+      this.isLectureRunning = false;
       this.classroom.isLectureRunning = false;
       this.classroom.lecturer = '';
       this.classroom.getLecturerSemaphore().release(); // Semaphore released
 
-      console.log(`${this.lecturerName}'s lecture over!`);
+      console.log(`${this.lecturerName}'s lecture is over!`);
     }
   }
 

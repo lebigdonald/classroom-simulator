@@ -29,7 +29,9 @@ export class Visitor {
   leave(): void {
     if (!this.classroom?.isLectureRunning && this.classroom?.lecturer === '') {
       this.isSitting = false;
-      this.classroom.filledVisitor--; // Increment filledVisitor variable when visitor leaves
+      if (this.classroom.filledVisitor > 0) {
+        this.classroom.filledVisitor--; // Increment filledVisitor variable when visitor leaves
+      }
       this.classroom?.getStudentAndVisitorSemaphore().release(); // Semaphore released
     }
   }
